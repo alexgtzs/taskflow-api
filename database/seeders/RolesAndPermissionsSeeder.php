@@ -56,6 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'view projects',
                 'create projects',
                 'update projects',
+                'delete projects',
                 'view tasks',
                 'create tasks',
                 'update tasks',

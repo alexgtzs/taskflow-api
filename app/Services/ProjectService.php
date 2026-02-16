@@ -22,7 +22,7 @@ class ProjectService
     public function store(User $user, array $data): Project
     {
         $project = $user->projects()->create($data);
-        return $project;
+        return $project->fresh();
     }
 
     public function show(Project $project): Project

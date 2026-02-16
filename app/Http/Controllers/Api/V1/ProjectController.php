@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Services\ProjectService;
-use Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Http\Resources\Api\V1\ProjectResource;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Api\V1\Project\StoreProjectRequest;
 use App\Http\Requests\Api\V1\Project\UpdateProjectRequest;
 
 class ProjectController extends Controller
@@ -29,7 +30,7 @@ class ProjectController extends Controller
         return ProjectResource::collection($projects);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreProjectRequest $request): JsonResponse
     {
         $project = $this->projectService->store(
             $request->user(),
