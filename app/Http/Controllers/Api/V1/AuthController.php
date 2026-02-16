@@ -47,7 +47,7 @@ class AuthController extends Controller
         $this->authService->logout($request->user());
 
         return response()->json([
-            'message' => 'Usuario deslogueado exitosamente'
+            'message' => 'Successfully logged out.'
         ], 200);
     }
 
@@ -56,9 +56,7 @@ class AuthController extends Controller
         $user = $request->user()->load('roles');
 
         return response()->json([
-            'data' => [
-                'user' => new UserResource($user)
-            ]
+            'data' => new UserResource($user)
         ], 200);
     }
 }
