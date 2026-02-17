@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -20,5 +21,7 @@ Route::prefix('v1')->group(function () {
     //Project Routes
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('projects', ProjectController::class);
+        Route::apiResource('projects.tasks', TaskController::class)->scoped();
+        Route::get('tasks', [TaskController::class, 'globalIndex']);
     });
 });
