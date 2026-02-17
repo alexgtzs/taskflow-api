@@ -27,6 +27,11 @@ class Task extends Model
         ];
     }
 
+    protected $attributes = [
+        'status' => 'todo',
+        'priority' => 'medium',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
