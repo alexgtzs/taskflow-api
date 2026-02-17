@@ -1,59 +1,248 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3">
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Sanctum-Auth-38B2AC?style=for-the-badge&logo=laravel&logoColor=white" alt="Sanctum">
 </p>
 
-## About Laravel
+# 🚀 TaskFlow API
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A production-ready RESTful API for task and project management, built with Laravel 12. Features token-based authentication, role-based access control (RBAC) with granular permissions, comprehensive test coverage, and interactive API documentation.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/tests-57%20passing-brightgreen?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/coverage->80%25-brightgreen?style=flat-square" alt="Coverage">
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/API-documented-orange?style=flat-square" alt="API Docs">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ✨ Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Authentication** — Register, login, logout, and profile retrieval with Laravel Sanctum tokens
+- **Projects CRUD** — Create, read, update, and delete projects with ownership protection
+- **Tasks CRUD** — Nested task management within projects, with global cross-project listing
+- **Role-Based Access Control** — Three roles (admin, manager, member) with 10 granular permissions via Spatie Permission
+- **Filtering & Pagination** — Filter tasks by status, priority, and assignee; paginated responses
+- **Rate Limiting** — Configurable throttling for API and auth endpoints (brute-force protection)
+- **API Documentation** — Interactive Swagger/OpenAPI docs at `/api/documentation`
+- **Comprehensive Testing** — 60+ feature tests covering auth, CRUD, authorization, and validation
+- **CI/CD Pipeline** — GitHub Actions running tests automatically on every push
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🏗️ Architecture
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+This project follows a **Service Layer** architecture pattern, keeping controllers thin and business logic decoupled.
 
-### Premium Partners
+```
+Request → Routes → Middleware → Controller → Form Request (validation)
+                                    ↓
+                              Service Layer (business logic)
+                                    ↓
+                              Eloquent Model (database)
+                                    ↓
+                              API Resource (response transformation)
+                                    ↓
+                              JSON Response
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Design Patterns Used
 
-## Contributing
+| Pattern | Where | Purpose |
+|---------|-------|---------|
+| Service Layer | `app/Services/` | Encapsulate business logic outside controllers |
+| Form Request | `app/Http/Requests/` | Validate and authorize incoming data |
+| API Resource | `app/Http/Resources/` | Transform models into consistent JSON responses |
+| Policy | `app/Policies/` | Two-level authorization (permission + ownership) |
+| Factory | `database/factories/` | Generate test data with expressive state methods |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Project Structure
 
-## Code of Conduct
+```
+app/
+├── Http/
+│   ├── Controllers/Api/V1/     # Thin controllers (max 10 lines per method)
+│   ├── Requests/Api/V1/        # Validation & authorization
+│   └── Resources/Api/V1/       # Response transformations
+├── Models/                     # Eloquent models with relationships
+├── Policies/                   # Permission + ownership checks
+└── Services/                   # Business logic layer
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+tests/
+├── Feature/Api/V1/
+│   ├── Auth/                   # 14 authentication tests
+│   ├── Project/                # 19 project CRUD tests
+│   └── Task/                   # 27 task CRUD tests
+└── Unit/
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔌 API Endpoints
 
-## License
+All endpoints are prefixed with `/api/v1`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Authentication
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `POST` | `/auth/register` | Register a new user | No |
+| `POST` | `/auth/login` | Login and get token | No |
+| `POST` | `/auth/logout` | Revoke current token | Yes |
+| `GET` | `/auth/me` | Get user profile | Yes |
+
+### Projects
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `GET` | `/projects` | List projects (paginated, filterable) | Yes |
+| `POST` | `/projects` | Create a project | Yes |
+| `GET` | `/projects/{id}` | Get project details | Yes |
+| `PUT` | `/projects/{id}` | Update a project | Yes |
+| `DELETE` | `/projects/{id}` | Delete a project | Yes |
+
+### Tasks
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `GET` | `/projects/{id}/tasks` | List project tasks | Yes |
+| `POST` | `/projects/{id}/tasks` | Create a task | Yes |
+| `GET` | `/projects/{id}/tasks/{taskId}` | Get task details | Yes |
+| `PUT` | `/projects/{id}/tasks/{taskId}` | Update a task | Yes |
+| `DELETE` | `/projects/{id}/tasks/{taskId}` | Delete a task | Yes |
+| `GET` | `/tasks` | List all tasks (global, filterable) | Yes |
+
+### Filters
+
+```
+GET /api/v1/tasks?status=todo&priority=high&assigned_to=1
+GET /api/v1/projects?status=active
+```
+
+> 📖 Full interactive documentation available at `/api/documentation` when running the app.
+
+---
+
+## 🔐 Roles & Permissions
+
+Built with [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission) for granular access control.
+
+| Permission | Member | Manager | Admin |
+|-----------|--------|---------|-------|
+| View projects | ✅ | ✅ | ✅ |
+| Create projects | ❌ | ✅ | ✅ |
+| Update projects | ❌ | ✅ | ✅ |
+| Delete projects | ❌ | ❌ | ✅ |
+| View tasks | ✅ | ✅ | ✅ |
+| Create tasks | ✅ | ✅ | ✅ |
+| Update tasks | ✅ | ✅ | ✅ |
+| Delete tasks | ❌ | ✅ | ✅ |
+| Assign tasks | ❌ | ✅ | ✅ |
+| Manage users | ❌ | ❌ | ✅ |
+
+> Authorization is two-level: permission check **+** resource ownership check.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- PHP 8.2+
+- Composer 2.x
+- MySQL 8.0+
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/alexgtzs/taskflow-api.git
+cd taskflow-api
+
+# Install dependencies
+composer install
+
+# Set up environment
+cp .env.example .env
+php artisan key:generate
+
+# Configure your database in .env
+# DB_CONNECTION=mysql
+# DB_DATABASE=taskflow_api
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
+
+# Run migrations and seed roles/permissions
+php artisan migrate --seed
+
+# Install API routes and Sanctum
+php artisan install:api
+
+# Start the development server
+php artisan serve
+```
+
+The API will be available at `http://127.0.0.1:8000/api/v1`.
+
+### Quick Test
+
+```bash
+# Register a user
+curl -X POST http://127.0.0.1:8000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"name":"John Doe","email":"john@example.com","password":"password123","password_confirmation":"password123"}'
+
+# Use the returned token for authenticated requests
+curl http://127.0.0.1:8000/api/v1/auth/me \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+
+# Run specific test suite
+php artisan test --filter=AuthenticationTest
+php artisan test --filter=ProjectCrudTest
+php artisan test --filter=TaskCrudTest
+```
+
+### Test Coverage
+
+| Suite | Tests | Covers |
+|-------|-------|--------|
+| Authentication | 14 | Register, login, logout, profile, validation |
+| Projects CRUD | 18 | CRUD, ownership, permissions, filters, pagination |
+| Tasks CRUD | 25 | CRUD, nested routes, filters, assignment, permissions |
+| **Total** | **57** | **Auth, CRUD, authorization, validation, edge cases** |
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|-----------|---------|
+| [Laravel 12](https://laravel.com/) | PHP framework |
+| [Laravel Sanctum](https://laravel.com/docs/sanctum) | API token authentication |
+| [Spatie Permission](https://spatie.be/docs/laravel-permission) | Role-based access control |
+| [L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger) | OpenAPI documentation |
+| [Laravel Pint](https://laravel.com/docs/pint) | Code style enforcement |
+| [PHPUnit](https://phpunit.de/) | Testing framework |
+| [GitHub Actions](https://github.com/features/actions) | CI/CD pipeline |
+
+---
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT License](LICENSE).
