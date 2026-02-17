@@ -7,19 +7,19 @@ use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    //Auth Routes
-    Route::prefix('auth')->group(function () {
-        Route::post('register', [AuthController::class, 'register'])->name('auth.register');
-        Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-        
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
-            Route::get('me', [AuthController::class, 'me'])->name('auth.me');
+    // Auth routes
+    Route::prefix('auth')->middleware('throttle:auth')->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::post('login', [AuthController::class, 'login']);
+
+        Route::middleware('auth:sanctum')->withoutMiddleware('throttle:auth')->group(function () {
+            Route::post('logout', [AuthController::class, 'logout']);
+            Route::get('me', [AuthController::class, 'me']);
         });
     });
 
-    //Project Routes
-    Route::middleware('auth:sanctum')->group(function () {
+    // Protected routes
+    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::apiResource('projects', ProjectController::class);
         Route::apiResource('projects.tasks', TaskController::class)->scoped();
         Route::get('tasks', [TaskController::class, 'globalIndex']);
